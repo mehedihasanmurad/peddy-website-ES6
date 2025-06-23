@@ -9,3 +9,12 @@
     background-color: #fff;
     color: black;
 }
+
+/* #button-container{
+    display: flex;
+    justify-content: center;
+} */
+
+.active {
+    background-color: red;
+}
