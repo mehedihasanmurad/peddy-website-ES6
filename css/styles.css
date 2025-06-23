@@ -1,0 +1,11 @@
+
+.background {
+    background-color: rgba(14, 122, 129, 1);
+    color: white;
+    transition: all 1s ease;
+}
+
+.background:hover {
+    background-color: #fff;
+    color: black;
+}
