@@ -12,26 +12,43 @@ const displayLoadButton = (categories) => {
     categories.forEach(category => {
         const div = document.createElement("div");
         div.innerHTML = `
-            <div  class="flex items-center justify-center gap-3 border border-gray-200 rounded-lg px-12 py-3">
-                <img class="w-10 h-10" src=${category.category_icon} />
+                <button onclick="loadSinglePet('${category.category}')" class="flex items-center justify-center gap-3 border border-gray-200 rounded-lg px-12 py-3">
+                <img class="w-10 h-10" src=${category.category_icon}/> 
                 <p id="" class="font-bold">${category.category}</p>
-            </div>
+                </button>
         `;
         buttonContainer.appendChild(div);
     })
 }
 
+
 //all pets data load in API
 const loadAllPets = async() => {
     const res = await fetch("https://openapi.programming-hero.com/api/peddy/pets");
     const data = await res.json();
-    displayLoadAllPets(data.pets)
+    {   
+        displayLoadAllPets(data.pets)
+    }
 }
 //all pets display UI te dekhabo in API
 const displayLoadAllPets = (pets) => {
+    const cardContainer = document.getElementById("card-container");
+    cardContainer.innerHTML = "";
+    if (pets.length === 0) {
+        cardContainer.classList.remove("grid")
+        cardContainer.innerHTML = `
+            <div class="flex flex-col items-center space-y-5 py-7">
+                <img src="assets/error.webp" alt="">
+                <h1 class="text-3xl font-bold">No Information Available</h1>
+                <p class="text-center w-5/6">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a.</p>
+            </div>
+        `;
+    }
+    else {
+        cardContainer.classList.add("grid");
+    }
     pets.forEach(pet => {
-        console.log(pet);
-        const cardContainer = document.getElementById("card-container");
+        // console.log(pet.breed);
         const div = document.createElement("div");
         div.innerHTML = `
         <div class="shadow-sm rounded-lg px-5 py-5">
@@ -43,7 +60,9 @@ const displayLoadAllPets = (pets) => {
                     <div class="hidden md:block">
                         <i class="fa-solid fa-table"></i>
                     </div>
-                    <h1>Breed : ${pet.breed}</h1>
+                    <div>
+                        <h1>Breed : ${pet.breed}</h1>
+                    </div>
                 </div>
                 <div class="flex items-center gap-2">
                     <div class="hidden md:block">
@@ -74,6 +93,14 @@ const displayLoadAllPets = (pets) => {
         cardContainer.appendChild(div);
     })
 }
+
+//single pet id load in API
+const loadSinglePet = async (id) => {
+    const res = await fetch(`https://openapi.programming-hero.com/api/peddy/category/${id}`);
+    const data = await res.json();
+    displayLoadAllPets(data.data);
+}
+
 
 
 loadAllPets();
