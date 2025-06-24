@@ -49,7 +49,6 @@ const displayLoadAllPets = (pets) => {
     }
     
     pets.forEach(pet => {
-        // console.log(pet);
         const div = document.createElement("div");
         div.innerHTML = `
         <div class="shadow-sm rounded-lg px-5 py-5">
@@ -65,7 +64,7 @@ const displayLoadAllPets = (pets) => {
                         <i class="fa-solid fa-table"></i>
                     </div>
                     <div>
-                        <h1>Breed : ${pet.breed}</h1>
+                        <h1 class="text-sm">Breed : ${pet.breed}</h1>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -124,7 +123,80 @@ const loadSinglePet = async (name) => {
 const detailsShow = async (id) => {
     const res = await fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
     const data = await res.json();
-    console.log(data.petData);
+    displayDetailShow(data.petData);
+}
+
+const displayDetailShow = (singlePetId) => {
+    const modalContainer = document.getElementById("modal-container");
+    modalContainer.innerHTML = `
+        <button id="btn-click" class="btn" onclick="customModal.showModal()">open modal</button>
+            <dialog id="customModal" class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                <div class="shadow-sm rounded-lg px-5 py-5">
+                    <figure class="">
+                        <img class="rounded-lg w-full" src=${singlePetId.image}/>
+                    </figure>
+                    <div class="mt-4">
+                        <h1 class="text-2xl font-bold">${singlePetId.pet_name}</h1>
+                    </div>
+                    <div class="border-b py-5 space-y-2 text-sm grid grid-cols-1 md:grid-cols-2">
+                        <div class="flex items-center gap-2">
+                            <div class="hidden md:block">
+                                <i class="fa-solid fa-table"></i>
+                            </div>
+                            <div>
+                                <h1>Breed : ${singlePetId.breed}</h1>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="hidden md:block">
+                                <i class="fa-solid fa-cake-candles"></i>
+                            </div>
+                            <h1>Birth : ${singlePetId.date_of_birth}</h1>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="hidden md:block">
+                                <i class="fa-solid fa-venus"></i>
+                            </div>
+                            <h1>Gender : ${singlePetId.gender}</h1>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="hidden md:block">
+                                <i class="fa-solid fa-dollar-sign"></i>
+                            </div>
+                            <h1>Price : ${singlePetId.price} $</h1>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="hidden md:block">
+                                <i class="fa-solid fa-venus"></i>
+                            </div>
+                            <h1>Vaccinated status : ${singlePetId.vaccinated_status}</h1>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="mt-3 font-bold text-lg">Details Information</h1>
+                        <div>
+                            <p id="pet-description">${singlePetId.pet_details.slice(0, 100)}</p>
+                            <button id="see-more-btn" class="font-extrabold">See More</button>
+                        </div>
+                    </div>
+                    <div class="modal-action border py-2 flex justify-center rounded-lg details">
+                        <form method="dialog">
+                            <button class="text-[#0E7A81] font-bold">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
+    `;
+    // way-1
+    // document.getElementById("customModal").showModal();
+    document.getElementById("btn-click").click();
+    // See More button ar kaj
+    document.getElementById("see-more-btn").addEventListener("click", () => {
+        const description = document.getElementById("pet-description");
+        description.innerText = singlePetId.pet_details;
+        document.getElementById("see-more-btn").style.display = "none";
+    });
 }
 
 //remove active color

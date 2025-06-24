@@ -21,10 +21,9 @@
     color: white;
 }
 
-/* #button-container{
-    display: flex;
-    justify-content: center;
-} */
+.details {
+    background-color: rgba(14, 122, 129, 0.2)
+}
 
 .active {
     background-color: rgba(14, 122, 129, 0.1);
