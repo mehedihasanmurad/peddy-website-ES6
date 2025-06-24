@@ -49,6 +49,7 @@ const displayLoadAllPets = (pets) => {
     }
     
     pets.forEach(pet => {
+        // console.log(pet)
         const div = document.createElement("div");
         div.innerHTML = `
         <div class="shadow-sm rounded-lg px-5 py-5">
@@ -188,8 +189,7 @@ const displayDetailShow = (singlePetId) => {
                 </div>
             </dialog>
     `;
-    // way-1
-    // document.getElementById("customModal").showModal();
+    
     document.getElementById("btn-click").click();
     // See More button ar kaj
     document.getElementById("see-more-btn").addEventListener("click", () => {
@@ -216,6 +216,15 @@ setTimeout(() => {
     }, 2000);
 });
 
+document.getElementById("view-more").addEventListener("click", () => {
+    const mainContainer = document.getElementById("all-container");
+    mainContainer.classList.add("hidden")
+    mainContainer.classList.remove("hidden")
+})
+
+
+
 
 loadAllPets();
 loadButton();
+    
