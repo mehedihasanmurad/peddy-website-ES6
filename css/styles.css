@@ -27,5 +27,7 @@
 } */
 
 .active {
-    background-color: red;
+    background-color: rgba(14, 122, 129, 0.1);
+    border-radius: 100px;
+    border: 1px solid rgba(14, 122, 129, 1);
 }

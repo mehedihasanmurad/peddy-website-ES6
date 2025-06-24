@@ -6,15 +6,15 @@ const loadButton = async() => {
 }
 //button display UI te dekhabo API theke
 const displayLoadButton = (categories) => {
-    // console.log(categories)
     const buttonContainer = document.getElementById("button-container");
     buttonContainer.innerHTML = "";
     categories.forEach(category => {
+        // console.log(category.category)
         const div = document.createElement("div");
         div.innerHTML = `
-                <button onclick="loadSinglePet('${category.category}')" class="flex items-center justify-center gap-3 border border-gray-200 rounded-lg px-12 py-3">
+                <button id="btn-${category.category}" onclick="loadSinglePet('${category.category}')" class="flex items-center justify-center gap-3 border border-gray-200 rounded-lg px-12 py-3 btn-category">
                 <img class="w-10 h-10" src=${category.category_icon}/> 
-                <p id="" class="font-bold">${category.category}</p>
+                <p class="font-bold">${category.category}</p>
                 </button>
         `;
         buttonContainer.appendChild(div);
@@ -22,13 +22,13 @@ const displayLoadButton = (categories) => {
 }
 
 
-//all pets data load in API
-const loadAllPets = async() => {
-    const res = await fetch("https://openapi.programming-hero.com/api/peddy/pets");
+
+// all pets API load theke load hobe and price gulo sort korbe
+const loadAllPets = async () => {
+    const res = await fetch("https://openapi.programming-hero.com/api/peddy/pets")
     const data = await res.json();
-    {   
-        displayLoadAllPets(data.pets)
-    }
+    const shortPrice = data.pets.sort((a, b) => a.price - b.price);
+    displayLoadAllPets(shortPrice);
 }
 //all pets display UI te dekhabo in API
 const displayLoadAllPets = (pets) => {
@@ -47,15 +47,19 @@ const displayLoadAllPets = (pets) => {
     else {
         cardContainer.classList.add("grid");
     }
+    
     pets.forEach(pet => {
-        // console.log(pet.breed);
+        // console.log(pet);
         const div = document.createElement("div");
         div.innerHTML = `
         <div class="shadow-sm rounded-lg px-5 py-5">
              <figure class="">
-                <img class="rounded-lg md:h-50" src=${pet.image} alt="Shoes" />
+                <img class="rounded-lg md:h-50" src=${pet.image}/>
             </figure>
             <div class="border-b py-5 space-y-2 text-sm">
+                <div>
+                    <h1 class="text-2xl font-bold">${pet.pet_name}</h1>
+                </div>
                 <div class="flex items-center gap-2">
                     <div class="hidden md:block">
                         <i class="fa-solid fa-table"></i>
@@ -84,9 +88,9 @@ const displayLoadAllPets = (pets) => {
                 </div>
             </div>
             <div class="flex flex-col md:flex-row gap-3 md:justify-between mt-4">
-                    <button class="border px-4 rounded-lg py-2 another-background"><i class="fa-solid fa-thumbs-up text-blue-500"></i></button>
+                    <button onclick="likeBtn('${pet.image}')" class="border px-4 rounded-lg py-2 another-background"><i class="fa-solid fa-thumbs-up text-blue-500"></i></button>
                     <button class="border px-4 rounded-lg py-2 another-background">Adopt</button>
-                    <button class="border px-4 rounded-lg py-2 another-background">Details</button>
+                    <button onclick="detailsShow('${pet.petId}')" class="border px-4 rounded-lg py-2 another-background">Details</button>
                 </div>
         </div>
         `;
@@ -94,13 +98,51 @@ const displayLoadAllPets = (pets) => {
     })
 }
 
-//single pet id load in API
-const loadSinglePet = async (id) => {
-    const res = await fetch(`https://openapi.programming-hero.com/api/peddy/category/${id}`);
-    const data = await res.json();
-    displayLoadAllPets(data.data);
+//paser image dekhanor jonno
+const likeBtn = (imageUrl) => {
+    const cardImage = document.getElementById("card-image");
+    const img = document.createElement("img");
+    img.src = imageUrl;
+    cardImage.appendChild(img);
 }
 
+//single pet name load in API
+const loadSinglePet = async (name) => {
+    const res = await fetch(`https://openapi.programming-hero.com/api/peddy/category/${name}`);
+    const data = await res.json();
+    {   
+        // remove color 
+        removeActiveClass();
+        //active color
+        const activeButton = document.getElementById(`btn-${name}`)
+        activeButton.classList.add("active");
+        displayLoadAllPets(data.data);
+    }
+}
+
+//details button click and single id load in API
+const detailsShow = async (id) => {
+    const res = await fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
+    const data = await res.json();
+    console.log(data.petData);
+}
+
+//remove active color
+const removeActiveClass = () => {
+    const removeActiveClass = document.getElementsByClassName("btn-category");
+    for (const removeButtonActive of removeActiveClass) {
+        removeButtonActive.classList.remove("active");
+    }
+}
+
+// load spinner
+const spinnerContainer = document.getElementById("spinner-container");
+setTimeout(() => {
+    spinnerContainer.style.display = "block";
+    setTimeout(() => {
+        spinnerContainer.style.display = "none";
+    }, 2000);
+});
 
 
 loadAllPets();
